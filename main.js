@@ -104,13 +104,27 @@ function doWork() {
     let baseColor = dollarSpot.style.color;
     // Hover changes color.
     viewCount.addEventListener('mouseenter', function() {
-      dollarSpot.style.color = '#FF69B4'; 
+      dollarSpot.style.color = '#FF69B4';
+      dollarSpot.style.boxShadow = '0 0 0 3px #FF69B4'; 
       this.style.color = '#FF69B4'; 
     });
 
     viewCount.addEventListener('mouseleave', function() {
-      dollarSpot.style.color = baseColor; // '#8B98A5';
-      this.style.color = baseColor; //'#8B98A5';
+      dollarSpot.style.color = baseColor;
+      dollarSpot.style.boxShadow = null;
+      this.style.color = baseColor; 
+    });
+
+    dollarSpot.addEventListener('mouseenter', function() {
+      viewCount.style.color = '#FF69B4';
+      this.style.boxShadow = '0 0 0 3px #FF69B4'; 
+      this.style.color = '#FF69B4'; 
+    });
+
+    dollarSpot.addEventListener('mouseleave', function() {
+      viewCount.style.color = baseColor;
+      this.style.boxShadow = null;
+      this.style.color = baseColor;
     });
     
   });
