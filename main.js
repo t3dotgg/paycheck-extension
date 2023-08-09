@@ -20,6 +20,13 @@ function convertToDollars(number) {
   return processed.toFixed(2);
 }
 
+// USD conversion rate to eur
+const USD_TO_EUR_CONVERSION_RATE = 0.91084294;
+
+function convertToEuros(dollarAmount) {
+  return dollarAmount * USD_TO_EUR_CONVERSION_RATE;
+}
+
 const globalSelectors = {};
 globalSelectors.postCounts = `[role="group"][id*="id__"]:only-child`;
 globalSelectors.articleDate = `[role="article"][aria-labelledby*="id__"][tabindex="-1"] time`;
@@ -39,17 +46,17 @@ function doWork() {
 
   const articleViewDateSection = document.querySelector(globalSelectors.articleDate);
 
-  if(articleViewDateSection) {
+  if (articleViewDateSection) {
     let rootDateViewsSection = articleViewDateSection.parentElement.parentElement.parentElement;
 
-    if(rootDateViewsSection?.children.length === 1) {
+    if (rootDateViewsSection?.children.length === 1) {
       // we're dealing with the <time> element on a quote retweet
       // do globalSelector query again but with 2nd result
       rootDateViewsSection = document.querySelectorAll(globalSelectors.articleDate)[1].parentElement.parentElement.parentElement;
     }
 
     // if there are more than 4, we already added the paycheck value
-    if(rootDateViewsSection?.children.length < 4) {
+    if (rootDateViewsSection?.children.length < 4) {
 
       // clone 2nd and 3rd child of rootDateViewsSection
       const clonedDateViewSeparator = rootDateViewsSection?.children[1].cloneNode(true);
@@ -91,7 +98,9 @@ function doWork() {
 
     // Get the number
     const viewCount = dollarBox.querySelector(innerSelectors.viewAmount);
-    viewCount.textContent = convertToDollars(viewCount.textContent);
+    const originalViewCount = viewCount.textContent; // Store the original view count
+    const dollarAmount = convertToDollars(originalViewCount);
+    viewCount.textContent = dollarAmount;
 
     // Swap the svg for a dollar sign
     const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)?.firstChild
@@ -100,6 +109,23 @@ function doWork() {
 
     // Magic alignment value
     dollarSpot.style.marginTop = "-0.6rem";
+
+    // Convert to euros
+    const euroAmount = convertToEuros(dollarAmount);
+    const euroBox = dollarBox.cloneNode(true);
+    parent.parentElement.insertBefore(euroBox, dollarBox.nextSibling);
+
+    const euroSpot = euroBox.querySelector(innerSelectors.dollarSpot)?.firstChild?.firstChild;
+
+    // Set the euro symbol
+    euroSpot.textContent = "€";
+    const decimalPlaces = euroAmount < 0.1 ? 4 : 2;
+
+    // Set the euro amount text
+    const euroCount = euroBox.querySelector(innerSelectors.viewAmount);
+    
+    // Displayed amount
+    euroCount.textContent = euroAmount.toFixed(decimalPlaces);
   });
 }
 
