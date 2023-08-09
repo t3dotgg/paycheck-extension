@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "PayCheck for Twitter",
+  "description": "See (a very VERY rough idea of) how much money a tweet is worth",
+  "version": "0.0.1",
+  "icons": {
+    "128": "PCT-icon.png"
+  },
+  "author": "Theo",
+  "content_scripts": [
+    {
+      "run_at": "document_end",
+      "matches": ["https://twitter.com/*", "https://mobile.twitter.com/*"],
+      "js": ["main.js"]
+    }
+  ]
+}
