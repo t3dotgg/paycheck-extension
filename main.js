@@ -1,4 +1,4 @@
-function convertFromTwitter(number) {
+function convertFromX(number) {
   const cleaned = number.replace(/,/g, "");
   var base = parseFloat(cleaned);
   if (number.toLowerCase().match(/k/)) {
@@ -13,7 +13,7 @@ function convertFromTwitter(number) {
 }
 
 function convertToDollars(number) {
-  const rawCount = convertFromTwitter(number);
+  const rawCount = convertFromX(number);
 
   const processed = rawCount * 0.000026;
   if (processed < 0.1) return processed.toFixed(5);

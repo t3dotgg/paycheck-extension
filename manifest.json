@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "PayCheck for Twitter",
+  "name": "PayCheck for X",
   "description": "See (a very VERY rough idea of) how much money a tweet is worth",
   "version": "0.0.1",
   "icons": {

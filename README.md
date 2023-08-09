@@ -1,6 +1,6 @@
-# PayCheck for Twitter
+# PayCheck for X
 
-tl;dr - I made an extension that (poorly) estimates how much money a tweet is worth
+tl;dr - I made an extension that (poorly) estimates how much money a post is worth
 
 # HOW TO INSTALL
 
