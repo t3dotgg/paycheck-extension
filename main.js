@@ -23,7 +23,7 @@ function convertToDollars(number) {
 const globalSelectors = {};
 globalSelectors.postCounts = `[role="group"][id*="id__"]:only-child`;
 globalSelectors.articleDate = `[role="article"][aria-labelledby*="id__"][tabindex="-1"] time`;
-globalSelectors.analyticsLink = " a[href*='/analytics']";
+globalSelectors.analyticsLink = " :not(.dollarBox)>a[href*='/analytics']";
 globalSelectors.viewCount = globalSelectors.postCounts + globalSelectors.analyticsLink;
 
 const innerSelectors = {};
@@ -71,36 +71,39 @@ function doWork() {
     }
   }
 
-  viewCounts.map((view) => {
-    // Early escape
-    if (view.classList.contains("replaced")) return;
+  for (const view of viewCounts) {
+    // only add the dollar box once
+    if (!view.classList.contains("replaced")) {
+      // make sure we don't touch this one again
+      view.classList.add("replaced");
 
-    // Make sure we don't touch this one again
-    view.classList.add("replaced");
+      // get parent and clone to make dollarBox
+      const parent = view.parentElement;
+      const dollarBox = parent.cloneNode(true);
+      dollarBox.classList.add("dollarBox");
 
-    // get parent and clone to make dollarBox
-    const parent = view.parentElement;
-    const dollarBox = parent.cloneNode(true);
+      // insert dollarBox after view count
+      parent.parentElement.insertBefore(dollarBox, parent.nextSibling);
 
-    // insert dollarBox after view count
-    parent.parentElement.insertBefore(dollarBox, parent.nextSibling);
+      // remove view count icon
+      const oldIcon = dollarBox.querySelector(innerSelectors.viewSVG);
+      oldIcon?.remove();
 
-    // Remove view count icon
-    const oldIcon = dollarBox.querySelector(innerSelectors.viewSVG);
-    oldIcon?.remove();
+      // swap the svg for a dollar sign
+      const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)?.firstChild?.firstChild;
+      dollarSpot.textContent = "$";
 
-    // Get the number
-    const viewCount = dollarBox.querySelector(innerSelectors.viewAmount);
-    viewCount.textContent = convertToDollars(viewCount.textContent);
+      // magic alignment value
+      dollarSpot.style.marginTop = "-0.6rem";
+    }
 
-    // Swap the svg for a dollar sign
-    const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)?.firstChild
-      ?.firstChild;
-    dollarSpot.textContent = "$";
-
-    // Magic alignment value
-    dollarSpot.style.marginTop = "-0.6rem";
-  });
+    // get the number of views and calculate & set the dollar amount
+    const dollarBox = view.parentElement.nextSibling.firstChild;
+    const viewCount = view.querySelector(innerSelectors.viewAmount)?.textContent;
+    if (viewCount == undefined) continue;
+    const dollarAmountArea = dollarBox.querySelector(innerSelectors.viewAmount);
+    dollarAmountArea.textContent = convertToDollars(viewCount);
+  }
 }
 
 function throttle(func, limit) {
