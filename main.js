@@ -115,8 +115,7 @@ function doWork() {
     const euroBox = dollarBox.cloneNode(true);
     parent.parentElement.insertBefore(euroBox, dollarBox.nextSibling);
 
-    // Get the spot where the euro symbol will be placed
-    const euroSpot = euroBox.querySelector(innerSelectors.dollarSpot)?.firstChild?.firstChild; // You can use the same spot as the dollar sign
+    const euroSpot = euroBox.querySelector(innerSelectors.dollarSpot)?.firstChild?.firstChild;
 
     // Set the euro symbol
     euroSpot.textContent = "€";
@@ -124,6 +123,8 @@ function doWork() {
 
     // Set the euro amount text
     const euroCount = euroBox.querySelector(innerSelectors.viewAmount);
+    
+    // Displayed amount
     euroCount.textContent = euroAmount.toFixed(decimalPlaces);
   });
 }
