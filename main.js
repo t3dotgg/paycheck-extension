@@ -127,12 +127,14 @@ function throttle(func, limit) {
 // If a console error is thrown an alert is made to allow the user to report it.
 // Override the default console.error method to capture errors
 const originalConsoleError = console.error;
-console.error = function(...args) {
-  // Call the original console.error method
-  originalConsoleError.apply(console, args);
-  // Display an alert to the user
-  alert('An error occurred. Please try again or contact support.');
-};
+document.addEventListener('DOMContentLoaded', function() {
+  console.error = function(...args) {
+    // Call the original console.error method
+    originalConsoleError.apply(console, args);
+    // Display an alert to the user
+    alert('An error occurred. Please try again or contact support.');
+  };
+});
 
 // Test throwing an error
 try {
