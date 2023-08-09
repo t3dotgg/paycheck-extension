@@ -100,6 +100,8 @@ function doWork() {
 
     // Magic alignment value
     dollarSpot.style.marginTop = "-0.6rem";
+    dollarSpot.style.color = "pink";
+    
   });
 }
 
