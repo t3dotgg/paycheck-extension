@@ -134,15 +134,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Display an alert to the user
     alert('An error occurred. Please try again or contact support.');
   };
+  // Test throwing an error
+  try {
+    // Simulate an error
+    throw new Error('This is a test error');
+  } catch (error) {
+    console.error(error);
+  }
 });
 
-// Test throwing an error
-try {
-  // Simulate an error
-  throw new Error('This is a test error');
-} catch (error) {
-  console.error(error);
-}
 
 
 // Function to start MutationObserver
