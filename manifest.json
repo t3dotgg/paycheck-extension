@@ -13,7 +13,12 @@
   "content_scripts": [
     {
       "run_at": "document_end",
-      "matches": ["https://twitter.com/*", "https://mobile.twitter.com/*", "https://x.com/*"],
+      "matches": [
+        "https://twitter.com/*",
+        "https://mobile.twitter.com/*",
+        "https://tweetdeck.twitter.com/*",
+        "https://x.com/*"
+      ],
       "js": ["main.js"]
     }
   ]
