@@ -100,6 +100,27 @@ function doWork() {
     // get the number of views and calculate & set the dollar amount
     const dollarBox = view.parentElement.nextSibling.firstChild;
     const viewCount = view.querySelector(innerSelectors.viewAmount)?.textContent;
+    const baseColor = dollarSpot.style.color;
+      // Hover changes color.
+      viewCount.addEventListener('mouseenter', function() {
+        dollarSpot.style.color = '#FF69B4';
+        this.style.color = '#FF69B4'; 
+      });
+
+      viewCount.addEventListener('mouseleave', function() {
+        dollarSpot.style.color = baseColor;
+        this.style.color = baseColor; 
+      });
+
+      dollarSpot.addEventListener('mouseenter', function() {
+        viewCount.style.color = '#FF69B4';
+        this.style.color = '#FF69B4'; 
+      });
+
+    dollarSpot.addEventListener('mouseleave', function() {
+        viewCount.style.color = baseColor;
+        this.style.color = baseColor;
+      });
     if (viewCount == undefined) continue;
     const dollarAmountArea = dollarBox.querySelector(innerSelectors.viewAmount);
     dollarAmountArea.textContent = convertToDollars(viewCount);
