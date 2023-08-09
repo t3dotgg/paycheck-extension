@@ -100,7 +100,17 @@ function doWork() {
 
     // Magic alignment value
     dollarSpot.style.marginTop = "-0.6rem";
-    dollarSpot.style.color = "pink";
+
+    // Hover changes color.
+    viewCount.addEventListener('mouseenter', function() {
+      dollarSpot.style.color = '#FF69B4'; 
+      this.style.color = '#FF69B4'; 
+    });
+
+    viewCount.addEventListener('mouseleave', function() {
+      dollarSpot.style.color = 'black';
+      this.style.color = 'black'; // Change the text color back to black when not hovered
+    });
     
   });
 }
