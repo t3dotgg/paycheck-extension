@@ -1,16 +1,19 @@
 {
   "manifest_version": 3,
-  "name": "PayCheck for Twitter",
-  "description": "See (a very VERY rough idea of) how much money a tweet is worth",
+  "name": "PayCheck for X",
+  "description": "See (a very VERY rough idea of) how much money a post is worth",
   "version": "0.0.1",
   "icons": {
-    "128": "PCT-icon.png"
+    "16": "/assets/PCX-icon-16.png",
+    "32": "/assets/PCX-icon-32.png",
+    "48": "/assets/PCX-icon-48.png",
+    "128": "/assets/PCX-icon-128.png"
   },
   "author": "Theo",
   "content_scripts": [
     {
       "run_at": "document_end",
-      "matches": ["https://twitter.com/*", "https://mobile.twitter.com/*"],
+      "matches": ["https://twitter.com/*", "https://mobile.twitter.com/*", "https://x.com/*"],
       "js": ["main.js"]
     }
   ]
