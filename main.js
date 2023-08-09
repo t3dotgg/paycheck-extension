@@ -1,6 +1,6 @@
-function convertFromTwitter(number) {
+function convertToRawCount(number) {
   const cleaned = number.replace(/,/g, "");
-  var base = parseFloat(cleaned);
+  const base = parseFloat(cleaned);
   if (number.toLowerCase().match(/k/)) {
     return Math.round(base * 1000);
   } else if (number.toLowerCase().match(/m/)) {
@@ -13,7 +13,7 @@ function convertFromTwitter(number) {
 }
 
 function convertToDollars(number) {
-  const rawCount = convertFromTwitter(number);
+  const rawCount = convertToRawCount(number);
 
   const processed = rawCount * 0.000026;
   if (processed < 0.1) return processed.toFixed(5);
@@ -21,16 +21,13 @@ function convertToDollars(number) {
 }
 
 const globalSelectors = {};
-globalSelectors.tweetCounts = `[role="group"][id*="id__"]:only-child`;
-globalSelectors.viewCount =
-  globalSelectors.tweetCounts + " a[href*='/analytics']";
+globalSelectors.postCounts = `[role="group"][id*="id__"]:only-child`;
+globalSelectors.viewCount = globalSelectors.postCounts + " a[href*='/analytics']";
 
 const innerSelectors = {};
 
 innerSelectors.dollarSpot = "div div:first-child";
-
 innerSelectors.viewSVG = "div div:first-child svg";
-
 innerSelectors.viewAmount = "div div:last-child span span span";
 
 function doWork() {
@@ -53,8 +50,7 @@ function doWork() {
     // Get the number
     const viewCount = view.querySelector(innerSelectors.viewAmount);
     console.log("processing viewCount", viewCount);
-    const dollars = convertToDollars(viewCount.textContent);
-    viewCount.textContent = dollars;
+    viewCount.textContent = convertToDollars(viewCount.textContent);
 
     // Swap the svg for a dollar sign
     const dollarSpot = view.querySelector(innerSelectors.dollarSpot)?.firstChild
@@ -89,7 +85,6 @@ function throttle(func, limit) {
 }
 
 // Function to start MutationObserver
-let mt; // Mutations timeout
 const observe = () => {
   console.log("starting observation");
   const observer = new MutationObserver((mutationsList) => {
@@ -97,8 +92,6 @@ const observe = () => {
 
     const runDocumentMutations = throttle(async () => {
       doWork();
-
-      return;
     }, 1000);
 
     runDocumentMutations();
