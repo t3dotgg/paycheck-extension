@@ -4,4 +4,4 @@ dist/
 tmp/
 
 .DS_STORE
-
+.idea
