@@ -25,7 +25,6 @@ globalSelectors.postCounts = `[role="group"][id*="id__"]:only-child`;
 globalSelectors.viewCount = globalSelectors.postCounts + " a[href*='/analytics']";
 
 const innerSelectors = {};
-
 innerSelectors.dollarSpot = "div div:first-child";
 innerSelectors.viewSVG = "div div:first-child svg";
 innerSelectors.viewAmount = "div div:last-child span span span";
@@ -42,20 +41,24 @@ function doWork() {
     // Make sure we don't touch this one again
     view.classList.add("replaced");
 
+    // get parent and clone to make dollarBox
+    const parent = view.parentElement;
+    const dollarBox = parent.cloneNode(true);
+
+    // insert dollarBox after view count
+    parent.parentElement.insertBefore(dollarBox, parent.nextSibling);
+
     // Remove view count icon
-    const oldIcon = view.querySelector(innerSelectors.viewSVG);
-    console.log("removing icon", oldIcon);
+    const oldIcon = dollarBox.querySelector(innerSelectors.viewSVG);
     oldIcon?.remove();
 
     // Get the number
-    const viewCount = view.querySelector(innerSelectors.viewAmount);
-    console.log("processing viewCount", viewCount);
+    const viewCount = dollarBox.querySelector(innerSelectors.viewAmount);
     viewCount.textContent = convertToDollars(viewCount.textContent);
 
     // Swap the svg for a dollar sign
-    const dollarSpot = view.querySelector(innerSelectors.dollarSpot)?.firstChild
+    const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)?.firstChild
       ?.firstChild;
-    console.log("adding dollar sign", dollarSpot);
     dollarSpot.textContent = "$";
 
     // Magic alignment value
@@ -86,7 +89,6 @@ function throttle(func, limit) {
 
 // Function to start MutationObserver
 const observe = () => {
-  console.log("starting observation");
   const observer = new MutationObserver((mutationsList) => {
     if (!mutationsList.length) return;
 
