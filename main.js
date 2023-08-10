@@ -134,6 +134,7 @@ const observe = () => {
 
     const runDocumentMutations = throttle(async () => {
       requestAnimationFrame(doWork);
+      
     }, 1000);
 
     runDocumentMutations();
