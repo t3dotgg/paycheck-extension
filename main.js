@@ -133,7 +133,7 @@ const observe = () => {
     if (!mutationsList.length) return;
 
     const runDocumentMutations = throttle(async () => {
-      doWork();
+      requestAnimationFrame(doWork);
     }, 1000);
 
     runDocumentMutations();
