@@ -96,7 +96,6 @@ function doWork() {
       // replace svg content with dollar sign
       oldIcon.innerHTML = `<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="1.5rem">$</text>`
       
-      // swap the svg for a dollar sign
       const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)?.firstChild?.firstChild;
       dollarSpot.style.transition = "color 0.2s, background-color 0.2s";
 
