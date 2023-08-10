@@ -24,7 +24,8 @@ const globalSelectors = {};
 globalSelectors.postCounts = `[role="group"][id*="id__"]:only-child`;
 globalSelectors.articleDate = `[role="article"][aria-labelledby*="id__"][tabindex="-1"] time`;
 globalSelectors.analyticsLink = " :not(.dollarBox)>a[href*='/analytics']";
-globalSelectors.viewCount = globalSelectors.postCounts + globalSelectors.analyticsLink;
+globalSelectors.viewCount =
+  globalSelectors.postCounts + globalSelectors.analyticsLink;
 
 const innerSelectors = {};
 innerSelectors.dollarSpot = "div div:first-child";
@@ -37,37 +38,52 @@ function doWork() {
     document.querySelectorAll(globalSelectors.viewCount)
   );
 
-  const articleViewDateSection = document.querySelector(globalSelectors.articleDate);
+  const articleViewDateSection = document.querySelector(
+    globalSelectors.articleDate
+  );
 
-  if(articleViewDateSection) {
-    let rootDateViewsSection = articleViewDateSection.parentElement.parentElement.parentElement;
+  if (articleViewDateSection) {
+    let rootDateViewsSection =
+      articleViewDateSection.parentElement.parentElement.parentElement;
 
-    if(rootDateViewsSection?.children.length === 1) {
+    if (rootDateViewsSection?.children.length === 1) {
       // we're dealing with the <time> element on a quote retweet
       // do globalSelector query again but with 2nd result
-      rootDateViewsSection = document.querySelectorAll(globalSelectors.articleDate)[1].parentElement.parentElement.parentElement;
+      rootDateViewsSection = document.querySelectorAll(
+        globalSelectors.articleDate
+      )[1].parentElement.parentElement.parentElement;
     }
 
     // if there are more than 4, we already added the paycheck value
-    if(rootDateViewsSection?.children.length < 4) {
-
+    if (rootDateViewsSection?.children.length < 4) {
       // clone 2nd and 3rd child of rootDateViewsSection
-      const clonedDateViewSeparator = rootDateViewsSection?.children[1].cloneNode(true);
+      const clonedDateViewSeparator =
+        rootDateViewsSection?.children[1].cloneNode(true);
       const clonedDateView = rootDateViewsSection?.children[2].cloneNode(true);
 
       // insert clonedDateViews and clonedDateViewsTwo after the 3rd child we just cloned
-      rootDateViewsSection?.insertBefore(clonedDateViewSeparator, rootDateViewsSection?.children[2].nextSibling);
-      rootDateViewsSection?.insertBefore(clonedDateView, rootDateViewsSection?.children[3].nextSibling);
+      rootDateViewsSection?.insertBefore(
+        clonedDateViewSeparator,
+        rootDateViewsSection?.children[2].nextSibling
+      );
+      rootDateViewsSection?.insertBefore(
+        clonedDateView,
+        rootDateViewsSection?.children[3].nextSibling
+      );
 
       // get view count value from 'clonedDateViewsTwo'
-      const viewCountValue = clonedDateView?.querySelector(innerSelectors.articleViewAmount)?.textContent;
+      const viewCountValue = clonedDateView?.querySelector(
+        innerSelectors.articleViewAmount
+      )?.textContent;
       const dollarAmount = convertToDollars(viewCountValue);
 
       // replace textContent in cloned clonedDateViews (now 4th child) with converted view count value
-      clonedDateView.querySelector(innerSelectors.articleViewAmount).textContent = "$" + dollarAmount;
+      clonedDateView.querySelector(
+        innerSelectors.articleViewAmount
+      ).textContent = "$" + dollarAmount;
 
       // remove 'views' label
-      clonedDateView.querySelector(`span`).children[1].remove()
+      clonedDateView.querySelector(`span`).children[1].remove();
     }
   }
 
@@ -90,18 +106,21 @@ function doWork() {
       oldIcon?.remove();
 
       // swap the svg for a dollar sign
-      const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)?.firstChild?.firstChild;
+      const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)
+        ?.firstChild?.firstChild;
       dollarSpot.textContent = "$";
 
       // magic alignment value
       dollarSpot.style.marginTop = "-0.6rem";
     }
-
     // get the number of views and calculate & set the dollar amount
     const dollarBox = view.parentElement.nextSibling.firstChild;
-    const viewCount = view.querySelector(innerSelectors.viewAmount)?.textContent;
+    const viewCount = view.querySelector(
+      innerSelectors.viewAmount
+    )?.textContent;
     if (viewCount == undefined) continue;
     const dollarAmountArea = dollarBox.querySelector(innerSelectors.viewAmount);
+
     dollarAmountArea.textContent = convertToDollars(viewCount);
   }
 }
@@ -133,7 +152,7 @@ const observe = () => {
     if (!mutationsList.length) return;
 
     const runDocumentMutations = throttle(async () => {
-      doWork();
+      requestAnimationFrame(doWork);
     }, 1000);
 
     runDocumentMutations();
