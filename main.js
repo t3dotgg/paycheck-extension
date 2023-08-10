@@ -95,35 +95,35 @@ function doWork() {
 
       // magic alignment value
       dollarSpot.style.marginTop = "-0.6rem";
+
+      // Hover to change color
+      const baseColor = dollarSpot.style.color;
+      dollarSpot.addEventListener('mouseover', () => {
+        dollarAmountArea.style.color = '#FF69B4';
+        dollarSpot.style.color = '#FF69B4';
+      });
+      dollarSpot.addEventListener('mouseout', () => {
+        dollarAmountArea.style.color = baseColor;
+        dollarSpot.style.color = baseColor;
+      });
     }
 
     // get the number of views and calculate & set the dollar amount
     const dollarBox = view.parentElement.nextSibling.firstChild;
     const viewCount = view.querySelector(innerSelectors.viewAmount)?.textContent;
-    const baseColor = dollarSpot.style.color;
-      // Hover changes color.
-      viewCount.addEventListener('mouseenter', function() {
-        dollarSpot.style.color = '#FF69B4';
-        this.style.color = '#FF69B4'; 
-      });
-
-      viewCount.addEventListener('mouseleave', function() {
-        dollarSpot.style.color = baseColor;
-        this.style.color = baseColor; 
-      });
-
-      dollarSpot.addEventListener('mouseenter', function() {
-        viewCount.style.color = '#FF69B4';
-        this.style.color = '#FF69B4'; 
-      });
-
-    dollarSpot.addEventListener('mouseleave', function() {
-        viewCount.style.color = baseColor;
-        this.style.color = baseColor;
-      });
     if (viewCount == undefined) continue;
     const dollarAmountArea = dollarBox.querySelector(innerSelectors.viewAmount);
     dollarAmountArea.textContent = convertToDollars(viewCount);
+    const dummyDollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)?.firstChild?.firstChild;
+    const baseColor = dollarBox.style.color;
+    dollarBox.addEventListener('mouseover', () => {
+      dollarAmountArea.style.color = '#FF69B4';
+      dummyDollarSpot.style.color = '#FF69B4';
+    });
+    dollarBox.addEventListener('mouseout', () => {
+      dummyDollarSpot.style.color = baseColor;
+      dollarAmountArea.style.color = baseColor;
+    });
   }
 }
 
