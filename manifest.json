@@ -21,5 +21,11 @@
       ],
       "js": ["main.js"]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "paycheckforx@t3.gg",
+      "strict_min_version": "109.0"
+    }
+  }
 }
