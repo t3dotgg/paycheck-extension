@@ -93,8 +93,22 @@ function doWork() {
       const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)?.firstChild?.firstChild;
       dollarSpot.textContent = "$";
 
+      dollarSpot.style.transition = "color 0.2s, background-color 0.2s";
+
       // magic alignment value
       dollarSpot.style.marginTop = "-0.6rem";
+      // mimick the platform hover colors transition
+      dollarBox.onmouseover = () => {
+        dollarSpot.style.color = "rgb(255, 230, 50)";
+        
+        dollarAmountArea.style.color = "rgb(255, 230, 50)";
+      }
+
+      dollarBox.onmouseout = () => {
+        dollarSpot.style.color = "";
+        
+        dollarAmountArea.style.color = "";
+      }
     }
 
     // get the number of views and calculate & set the dollar amount
@@ -103,6 +117,8 @@ function doWork() {
     if (viewCount == undefined) continue;
     const dollarAmountArea = dollarBox.querySelector(innerSelectors.viewAmount);
     dollarAmountArea.textContent = convertToDollars(viewCount);
+
+    dollarAmountArea.style.transition = "color 0.2s ease";
   }
 }
 
@@ -133,7 +149,7 @@ const observe = () => {
     if (!mutationsList.length) return;
 
     const runDocumentMutations = throttle(async () => {
-      doWork();
+      requestAnimationFrame(doWork);
     }, 1000);
 
     runDocumentMutations();
