@@ -72,13 +72,13 @@ function doWork() {
 
   const articleViewDateSections = document.querySelectorAll(globalSelectors.articleDate);
 
-  if(articleViewDateSections.length) {
+  if (articleViewDateSections.length) {
     // the rootDateViewsSection will always be the parent->parent->parent of the last element of the articleDate querySelectorAll result
     let rootDateViewsSection = articleViewDateSections[articleViewDateSections.length - 1].parentElement.parentElement.parentElement;
 
     // if there is one child, that means it's an old tweet with no viewcount
     // if there are more than 4, we already added the paycheck value
-    if(rootDateViewsSection?.children?.length !== 1 && rootDateViewsSection?.children.length < 4) {
+    if (rootDateViewsSection?.children?.length !== 1 && rootDateViewsSection?.children.length < 4) {
       // clone 2nd and 3rd child of rootDateViewsSection
       const clonedDateViewSeparator =
         rootDateViewsSection?.children[1].cloneNode(true);
