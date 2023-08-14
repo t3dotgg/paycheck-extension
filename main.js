@@ -129,13 +129,12 @@ function throttle(func, limit) {
 
 // Function to start MutationObserver
 const observe = () => {
+  const runDocumentMutations = throttle(() => {
+    requestAnimationFrame(doWork);
+  }, 1000);
+  
   const observer = new MutationObserver((mutationsList) => {
     if (!mutationsList.length) return;
-
-    const runDocumentMutations = throttle(async () => {
-      requestAnimationFrame(doWork);
-    }, 1000);
-
     runDocumentMutations();
   });
 
