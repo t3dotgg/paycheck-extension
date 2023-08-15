@@ -1,15 +1,47 @@
-function convertToRawCount(number) {
-  const cleaned = number.replace(/,/g, "");
-  const base = parseFloat(cleaned);
-  if (number.toLowerCase().match(/k/)) {
-    return Math.round(base * 1000);
-  } else if (number.toLowerCase().match(/m/)) {
-    return Math.round(base * 1000000);
-  } else if (number.toLowerCase().match(/b/)) {
-    return Math.round(base * 1000000000);
-  } else {
-    return base;
+function convertToRawCount(internationalInputString) {
+  const numberPattern = /([\d,.]+)([kmb]*)/i;
+  const matches = internationalInputString.match(numberPattern);
+
+  if (!matches) {
+    return NaN; // Return NaN if the input doesn't match the expected pattern
   }
+
+  const numericPart = matches[1];
+  const multiplier = matches[2].toLowerCase();
+
+  let numericValue;
+
+  const lastChars = [
+    numericPart.slice(-1),
+    numericPart.slice(-2, -1),
+    numericPart.slice(-3, -2),
+  ];
+
+  // Check if second or third to last character are , or . to handle international numbers
+  if (lastChars.includes(".") || lastChars.includes(",")) {
+    const parts = numericPart.replace(",", ".").split(".");
+    const integerPart = parts[0].replace(/[,]/g, "");
+    const decimalPart = parts[1] ? parts[1] : "0";
+    numericValue = parseFloat(integerPart + "." + decimalPart);
+  } else {
+    numericValue = parseFloat(numericPart);
+  }
+
+  let factor = 1;
+
+  switch (multiplier) {
+    case "k":
+      factor = 1000;
+      break;
+    case "m":
+      factor = 1000000;
+      break;
+    case "b":
+      factor = 1000000000;
+      break;
+  }
+
+  return Math.round(numericValue * factor);
 }
 
 function convertToDollars(number) {
