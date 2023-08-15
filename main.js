@@ -1,21 +1,5 @@
-function convertToRawCount(number) {
-  const cleaned = number.replace(/,/g, "");
-  const base = parseFloat(cleaned);
-  if (number.toLowerCase().match(/k/)) {
-    return Math.round(base * 1000);
-  } else if (number.toLowerCase().match(/m/)) {
-    return Math.round(base * 1000000);
-  } else if (number.toLowerCase().match(/b/)) {
-    return Math.round(base * 1000000000);
-  } else {
-    return base;
-  }
-}
-
 function convertToDollars(number) {
-  const rawCount = convertToRawCount(number);
-
-  const processed = rawCount * 0.000026;
+  const processed = number * 0.000026;
   if (processed < 0.1) return processed.toFixed(5);
   return processed.toFixed(2);
 }
@@ -99,10 +83,10 @@ function doWork() {
 
     // get the number of views and calculate & set the dollar amount
     const dollarBox = view.parentElement.nextSibling.firstChild;
-    const viewCount = view.querySelector(innerSelectors.viewAmount)?.textContent;
-    if (viewCount == undefined) continue;
+    const viewCount = Number(view?.ariaLabel.replace(/\D/ig, ''));
+    if (Number.isNaN(viewCount)) continue;
     const dollarAmountArea = dollarBox.querySelector(innerSelectors.viewAmount);
-    dollarAmountArea.textContent = convertToDollars(viewCount);
+    if (dollarAmountArea) dollarAmountArea.textContent = convertToDollars(viewCount);
   }
 }
 
