@@ -24,7 +24,7 @@ function convertToRawCount(internationalInputString) {
     const decimalPart = parts[1] ? parts[1] : "0";
     numericValue = parseFloat(integerPart + "." + decimalPart);
   } else {
-    numericValue = parseFloat(numericPart);
+    numericValue = parseFloat(numericPart.replaceAll(",", ""));
   }
 
   let factor = 1;
