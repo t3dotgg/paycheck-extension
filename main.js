@@ -65,6 +65,8 @@ innerSelectors.viewSVG = "div div:first-child svg";
 innerSelectors.viewAmount = "div div:last-child span span span";
 innerSelectors.articleViewAmount = "span div:first-child span span span";
 
+const colorPaycheck = "255, 122, 0";
+
 function doWork() {
   const viewCounts = Array.from(
     document.querySelectorAll(globalSelectors.viewCount)
@@ -124,17 +126,33 @@ function doWork() {
       // insert dollarBox after view count
       parent.parentElement.insertBefore(dollarBox, parent.nextSibling);
 
-      // remove view count icon
       const oldIcon = dollarBox.querySelector(innerSelectors.viewSVG);
-      oldIcon?.remove();
 
-      // swap the svg for a dollar sign
-      const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)
-        ?.firstChild?.firstChild;
-      dollarSpot.textContent = "$";
+      oldIcon.style.transition = "color 0.2s";
 
       // magic alignment value
-      dollarSpot.style.marginTop = "-0.6rem";
+      oldIcon.style.marginBottom = "-0.25rem";
+      // replace svg content with dollar sign
+      oldIcon.innerHTML = `<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="1.5rem">$</text>`;
+
+      const dollarSpot = dollarBox.querySelector(innerSelectors.dollarSpot)
+        ?.firstChild?.firstChild;
+      dollarSpot.style.transition = "color 0.2s, background-color 0.2s";
+
+      // mimick the platform hover colors transition
+      dollarBox.onmouseover = () => {
+        oldIcon.style.color = `rgb(${colorPaycheck})`;
+        dollarSpot.style.backgroundColor = `rgb(${colorPaycheck}, 0.1)`;
+
+        dollarAmountArea.style.color = `rgb(${colorPaycheck})`;
+      };
+
+      dollarBox.onmouseout = () => {
+        oldIcon.style.color = "";
+        dollarSpot.style.backgroundColor = "";
+
+        dollarAmountArea.style.color = "";
+      };
     }
 
     // get the number of views and calculate & set the dollar amount
@@ -145,6 +163,9 @@ function doWork() {
     if (viewCount == undefined) continue;
     const dollarAmountArea = dollarBox.querySelector(innerSelectors.viewAmount);
     dollarAmountArea.textContent = convertToDollars(viewCount);
+
+    dollarAmountArea.style.transition =
+      "color 0.2s ease, background-color 0.2s ease";
   }
 }
 
