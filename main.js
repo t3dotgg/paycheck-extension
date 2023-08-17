@@ -70,24 +70,15 @@ function doWork() {
     document.querySelectorAll(globalSelectors.viewCount)
   );
 
-  const articleViewDateSection = document.querySelector(
-    globalSelectors.articleDate
-  );
+  const articleViewDateSections = document.querySelectorAll(globalSelectors.articleDate);
 
-  if (articleViewDateSection) {
-    let rootDateViewsSection =
-      articleViewDateSection.parentElement.parentElement.parentElement;
+  if (articleViewDateSections.length) {
+    // the rootDateViewsSection will always be the parent->parent->parent of the last element of the articleDate querySelectorAll result
+    let rootDateViewsSection = articleViewDateSections[articleViewDateSections.length - 1].parentElement.parentElement.parentElement;
 
-    if (rootDateViewsSection?.children.length === 1) {
-      // we're dealing with the <time> element on a quote retweet
-      // do globalSelector query again but with 2nd result
-      rootDateViewsSection = document.querySelectorAll(
-        globalSelectors.articleDate
-      )[1].parentElement.parentElement.parentElement;
-    }
-
+    // if there is one child, that means it's an old tweet with no viewcount
     // if there are more than 4, we already added the paycheck value
-    if (rootDateViewsSection?.children.length < 4) {
+    if (rootDateViewsSection?.children?.length !== 1 && rootDateViewsSection?.children.length < 4) {
       // clone 2nd and 3rd child of rootDateViewsSection
       const clonedDateViewSeparator =
         rootDateViewsSection?.children[1].cloneNode(true);
